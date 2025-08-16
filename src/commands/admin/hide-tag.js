@@ -1,7 +1,8 @@
-const { PREFIX, ULTRON_REFUSE_LEVEL, BASE_DIR } = require(`${BASE_DIR}/config`);
 const path = require("path");
+const config = require(path.join(__dirname, "..", "..", "config"));
+const { PREFIX, ULTRON_REFUSE_LEVEL, BASE_DIR } = config;
 
-// importar frases
+// Importa as frases externas
 const frasesNormais = require(path.join(BASE_DIR, "ultron-phrases", "normal"));
 const frasesInsatisfeito = require(path.join(BASE_DIR, "ultron-phrases", "insatisfeito"));
 const frasesRecusa = require(path.join(BASE_DIR, "ultron-phrases", "recusa"));
@@ -23,14 +24,14 @@ module.exports = {
     const { participants } = await socket.groupMetadata(remoteJid);
     const mentions = participants.map(({ id }) => id);
 
-    // chance de recusar
+    // Chance de recusa total
     if (Math.random() < ULTRON_REFUSE_LEVEL) {
       await sendText(pickRandom(frasesRecusa));
-      return; // não marca ninguém
+      return;
     }
 
-    // chance de insatisfação
-    const resposta = (Math.random() < 0.3) 
+    // Chance de insatisfação ou resposta normal
+    const resposta = (Math.random() < 0.3)
       ? pickRandom(frasesInsatisfeito)
       : pickRandom(frasesNormais);
 
@@ -39,4 +40,3 @@ module.exports = {
     await sendText(`📢 Marcando todos...\n\n${fullArgs}`, mentions);
   },
 };
-
