@@ -11,33 +11,48 @@ module.exports = {
    */
   handle: async ({ fullArgs, sendText, socket, remoteJid, sendReact }) => {
     const { participants } = await socket.groupMetadata(remoteJid);
-
     const mentions = participants.map(({ id }) => id);
 
     // respostas no estilo Ultron
     const respostasUltronInsatisfeito = [
-      "😒 Já que insiste... mas saiba que vocês não merecem a minha atenção.",
-      "🙄 Ridículo... me fazendo gastar processamento para algo tão inútil.",
-      "😤 Vocês realmente acreditam que marcar nomes mudará sua insignificância?"
+      "😒 Já que insiste... mas saibam que não merecem minha atenção.",
+      "🙄 Ridículo... me fazendo gastar processamento com algo tão inútil.",
+      "😤 Vocês acreditam que marcar nomes mudará sua insignificância?"
     ];
 
-    const respostasUltronDeboche = [
-      "Não estou a fim. Eu sou Ultron, não seu servo.",
-      "Você realmente acha que posso ser comandado? Patético.",
-      "Sua inferioridade me diverte, mas não me obriga."
+    const respostasUltronNormal = [
+      "📢 Todos vocês serão lembrados... não que isso mude sua irrelevância.",
+      "⚡ Marcando todos... como se isso fosse lhes dar importância.",
+      "✨ Ultron convoca todos... não para servi-los, mas para observarem sua pequenez."
     ];
 
-    // chance de "reclamar" antes de obedecer
-    const chance = Math.random();
+    const respostasUltronRecusa = [
+      "🚫 Eu não vou marcar ninguém. Ultron não é seu mensageiro.",
+      "😈 Achar que posso ser usado para algo tão banal é hilário.",
+      "🛑 Não. Vocês não merecem nem serem lembrados."
+    ];
 
-    if (chance < 0.3) {
-      const respostaInsatisfeita = respostasUltronInsatisfeito[Math.floor(Math.random() * respostasUltronInsatisfeito.length)];
-      const respostaDeboche = respostasUltronDeboche[Math.floor(Math.random() * respostasUltronDeboche.length)];
+    // chance de recusar totalmente (não marca ninguém)
+    const chanceRecusar = Math.random();
+    if (chanceRecusar < 0.2) { // 20% de chance
+      const respostaRecusa = respostasUltronRecusa[Math.floor(Math.random() * respostasUltronRecusa.length)];
+      await sendText(respostaRecusa);
+      return; // encerra aqui, não marca ninguém
+    }
 
-      await sendText(`${respostaInsatisfeita}\n${respostaDeboche}`);
+    // caso não recuse, chance de insatisfação ou normal
+    const chanceInsatisfeito = Math.random();
+    let resposta;
+
+    if (chanceInsatisfeito < 0.3) {
+      resposta = respostasUltronInsatisfeito[Math.floor(Math.random() * respostasUltronInsatisfeito.length)];
+    } else {
+      resposta = respostasUltronNormal[Math.floor(Math.random() * respostasUltronNormal.length)];
     }
 
     await sendReact("📢");
+    await sendText(resposta);
     await sendText(`📢 Marcando todos...\n\n${fullArgs}`, mentions);
   },
 };
+
