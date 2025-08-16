@@ -101,7 +101,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
 
     if (!(await checkPermission({ type, ...paramsHandler }))) {
       await sendErrorReply(
-        "Você não tem permissão para executar este comando!"
+        "Você não tem permissão para executar este comando, OTARÍO!"
       );
       return;
     }
@@ -111,7 +111,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
       !(await isAdmin({ remoteJid, userJid, socket }))
     ) {
       await sendWarningReply(
-        "Somente administradores podem executar comandos!"
+        "Somente os adm podem esar esse comando, você é só um mero membro,!"
       );
       return;
     }
@@ -124,7 +124,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
     ) {
       if (command.name !== "on") {
         await sendWarningReply(
-          "Este grupo está desativado! Peça para o dono do grupo ativar o bot!"
+          "Estou desativado nesse grupo, dá o teu geito de me ativar ai (espero que demore)"
         );
         return;
       }
@@ -149,7 +149,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
   if (fullMessage === groupPrefix) {
     await sendReact(BOT_EMOJI);
     await sendReply(
-      `Este é meu prefixo! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+      `O prefixo é esse, Use ${groupPrefix}menu para ver minha abilidades`
     );
 
     return;
@@ -157,7 +157,7 @@ exports.dynamicCommand = async (paramsHandler, startProcess) => {
 
   if (!hasTypeAndCommand({ type, command })) {
     await sendWarningReply(
-      `Comando não encontrado! Use ${groupPrefix}menu para ver os comandos disponíveis!`
+      `Esse comando nao foi encontrado! Use ${groupPrefix}menu para ver os comandos`
     );
 
     return;
