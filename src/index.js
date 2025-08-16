@@ -123,7 +123,7 @@ async function startBot() {
 
     load(socket);
 
-    successLog("✅ Bot iniciado com sucesso!");
+    successLog("✅ Já tô on 🙄");
 
     setInterval(() => {
       const currentStats = badMacHandler.getStats();
