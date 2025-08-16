@@ -14,31 +14,30 @@ module.exports = {
 
     const mentions = participants.map(({ id }) => id);
 
-    // lista de respostas de insatisfação
-    const respostasInsatisfeitas = [
-      "😒 Já que insiste...",
-      "🙄 Tá bom, né... já que não para de pedir...",
-      "😤 Sempre a mesma coisa... já que insiste..."
+    // respostas no estilo Ultron
+    const respostasUltronInsatisfeito = [
+      "😒 Já que insiste... mas saiba que vocês não merecem a minha atenção.",
+      "🙄 Ridículo... me fazendo gastar processamento para algo tão inútil.",
+      "😤 Vocês realmente acreditam que marcar nomes mudará sua insignificância?"
     ];
 
-    // lista de frases de desobediência
-    const respostasDesobediencia = [
-      "Não estou a fim.",
-      "Não quero.",
-      "Você é inferior demais pra eu querer te obedecer."
+    const respostasUltronDeboche = [
+      "Não estou a fim. Eu sou Ultron, não seu servo.",
+      "Você realmente acha que posso ser comandado? Patético.",
+      "Sua inferioridade me diverte, mas não me obriga."
     ];
 
-    // chance de dar "trabalho" antes de executar
-    const chance = Math.random(); // valor entre 0 e 1
+    // chance de "reclamar" antes de obedecer
+    const chance = Math.random();
 
-    if (chance < 0.3) { // 30% de chance de mostrar insatisfação
-      const respostaInsatisfeita = respostasInsatisfeitas[Math.floor(Math.random() * respostasInsatisfeitas.length)];
-      const respostaDesobediencia = respostasDesobediencia[Math.floor(Math.random() * respostasDesobediencia.length)];
+    if (chance < 0.3) {
+      const respostaInsatisfeita = respostasUltronInsatisfeito[Math.floor(Math.random() * respostasUltronInsatisfeito.length)];
+      const respostaDeboche = respostasUltronDeboche[Math.floor(Math.random() * respostasUltronDeboche.length)];
 
-      await sendText(`${respostaInsatisfeita}\n${respostaDesobediencia}`);
+      await sendText(`${respostaInsatisfeita}\n${respostaDeboche}`);
     }
 
     await sendReact("📢");
-    await sendText(`📢 Marcando todos!\n\n${fullArgs}`, mentions);
+    await sendText(`📢 Marcando todos...\n\n${fullArgs}`, mentions);
   },
 };
