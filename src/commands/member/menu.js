@@ -1,8 +1,9 @@
-const { PREFIX, ASSETS_DIR, ULTRON_REFUSE_LEVEL, BASE_DIR } = require(`${BASE_DIR}/config`);
-const { menuMessage } = require(`${BASE_DIR}/menu`);
 const path = require("path");
+const config = require(path.join(__dirname, "..", "..", "config"));
+const { PREFIX, ULTRON_REFUSE_LEVEL, BASE_DIR, ASSETS_DIR } = config;
+const { menuMessage } = require(path.join(BASE_DIR, "menu"));
 
-// importar frases
+// Importa as frases externas
 const frasesNormais = require(path.join(BASE_DIR, "ultron-phrases", "normal"));
 const frasesInsatisfeito = require(path.join(BASE_DIR, "ultron-phrases", "insatisfeito"));
 const frasesRecusa = require(path.join(BASE_DIR, "ultron-phrases", "recusa"));
@@ -16,15 +17,19 @@ module.exports = {
   description: "Menu de comandos",
   commands: ["menu", "help"],
   usage: `${PREFIX}menu`,
+  /**
+   * @param {CommandHandleProps} props
+   * @returns {Promise<void>}
+   */
   handle: async ({ remoteJid, sendImageFromFile, sendText, sendSuccessReact }) => {
-    // chance de recusar
+    // Chance de recusa total
     if (Math.random() < ULTRON_REFUSE_LEVEL) {
       await sendText(pickRandom(frasesRecusa));
       return;
     }
 
-    // chance de insatisfação
-    const resposta = (Math.random() < 0.3) 
+    // Chance de insatisfação ou resposta normal
+    const resposta = (Math.random() < 0.3)
       ? pickRandom(frasesInsatisfeito)
       : pickRandom(frasesNormais);
 
