@@ -1,7 +1,7 @@
 const path = require("path");
 
 // Prefixo padrão dos comandos.
-exports.PREFIX = "/";
+exports.PREFIX = ".";
 
 // Emoji do bot (mude se preferir).
 exports.BOT_EMOJI = "👾";
@@ -64,3 +64,11 @@ exports.PROXY_HOST = "ip";
 exports.PROXY_PORT = "porta";
 exports.PROXY_USERNAME = "usuário";
 exports.PROXY_PASSWORD = "senha";
+
+// ==============================
+// ⚡ Config especial do Ultron ⚡
+// ==============================
+
+// Nível de recusa do Ultron (% de chance dele NÃO obedecer)
+// Exemplo: 0.2 = 20% de chance, 0.5 = 50%, 1.0 = sempre recusa
+exports.ULTRON_REFUSE_LEVEL = 0.4;
