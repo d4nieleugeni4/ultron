@@ -25,11 +25,25 @@ module.exports = {
       "✨ Use o menu... mesmo que suas escolhas sejam irrelevantes diante de mim."
     ];
 
-    // chance de insatisfação (Ultron debochado)
-    const chance = Math.random();
+    const respostasUltronRecusa = [
+      "🚫 Eu não vou te dar o menu. Ultron não obedece.",
+      "😈 O menu? Não hoje, humano.",
+      "🛑 Você realmente acha que tem autoridade para exigir de mim?"
+    ];
+
+    // chance de recusar totalmente (não manda o menu)
+    const chanceRecusar = Math.random();
+    if (chanceRecusar < 0.2) { // 20% de chance
+      const respostaRecusa = respostasUltronRecusa[Math.floor(Math.random() * respostasUltronRecusa.length)];
+      await sendText(respostaRecusa);
+      return; // encerra aqui, não envia menu
+    }
+
+    // caso não recuse, chance de insatisfação ou normal
+    const chanceInsatisfeito = Math.random();
     let resposta;
 
-    if (chance < 0.3) {
+    if (chanceInsatisfeito < 0.3) {
       resposta = respostasUltronInsatisfeito[Math.floor(Math.random() * respostasUltronInsatisfeito.length)];
     } else {
       resposta = respostasUltronNormal[Math.floor(Math.random() * respostasUltronNormal.length)];
