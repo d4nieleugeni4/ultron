@@ -20,13 +20,13 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ fullArgs, sendText, socket, remoteJid, sendReact }) => {
+  handle: async ({ fullArgs, sendText, socket, remoteJid, sendReact, msg }) => {
     const { participants } = await socket.groupMetadata(remoteJid);
     const mentions = participants.map(({ id }) => id);
 
     // Chance de recusa total
     if (Math.random() < ULTRON_REFUSE_LEVEL) {
-      await sendText(pickRandom(frasesRecusa));
+      await sendText(pickRandom(frasesRecusa), { quoted: msg });
       return;
     }
 
@@ -36,7 +36,7 @@ module.exports = {
       : pickRandom(frasesNormais);
 
     await sendReact("📢");
-    await sendText(resposta);
-    await sendText(`📢 Marcando todos...\n\n${fullArgs}`, mentions);
+    await sendText(resposta, { quoted: msg });
+    await sendText(`📢 Marcando todos...\n\n${fullArgs}`, { quoted: msg, mentions });
   },
 };
