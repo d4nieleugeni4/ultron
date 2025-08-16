@@ -21,10 +21,10 @@ module.exports = {
    * @param {CommandHandleProps} props
    * @returns {Promise<void>}
    */
-  handle: async ({ remoteJid, sendImageFromFile, sendText, sendSuccessReact }) => {
+  handle: async ({ remoteJid, sendImageFromFile, sendText, sendSuccessReact, msg }) => {
     // Chance de recusa total
     if (Math.random() < ULTRON_REFUSE_LEVEL) {
-      await sendText(pickRandom(frasesRecusa));
+      await sendText(pickRandom(frasesRecusa), { quoted: msg });
       return;
     }
 
@@ -34,11 +34,12 @@ module.exports = {
       : pickRandom(frasesNormais);
 
     await sendSuccessReact();
-    await sendText(resposta);
+    await sendText(resposta, { quoted: msg });
 
     await sendImageFromFile(
       path.join(ASSETS_DIR, "images", "takeshi-bot.png"),
-      `\n\n${menuMessage(remoteJid)}`
+      `\n\n${menuMessage(remoteJid)}`,
+      { quoted: msg }
     );
   },
 };
