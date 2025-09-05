@@ -2,7 +2,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { DEFAULT_PREFIX, TEMP_DIR } = require(`${BASE_DIR}/config`);
 const { InvalidParameterError } = require(`${BASE_DIR}/errors`);
-const ffmpeg = require("fluent-ffmpeg");
 const { getRandomName } = require(`${BASE_DIR}/utils`);
 
 module.exports = {
@@ -33,9 +32,7 @@ module.exports = {
 
     await sendWaitReact();
 
-    const mediaCaption = `Aqui está sua ${
-      isImage ? "imagem" : "vídeo"
-    } revelada!`;
+    const mediaCaption = `Aqui está sua ${isImage ? "imagem" : "vídeo"} revelada!`;
 
     const outputPath = path.resolve(
       TEMP_DIR,
@@ -48,37 +45,20 @@ module.exports = {
       if (isImage) {
         inputPath = await downloadImage(webMessage, "input");
 
-        await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .outputOptions("-q:v 2")
-            .on("end", async () => {
-              await sendImageFromFile(outputPath, mediaCaption);
-              await sendSuccessReact();
-              resolve();
-            })
-            .on("error", (err) => {
-              console.error("Erro FFmpeg:", err);
-              reject(err);
-            })
-            .save(outputPath);
-        });
+        // Copia o arquivo sem reprocessar
+        fs.copyFileSync(inputPath, outputPath);
+
+        await sendImageFromFile(outputPath, mediaCaption);
+        await sendSuccessReact();
+
       } else if (isVideo) {
         inputPath = await downloadVideo(webMessage, "input");
 
-        await new Promise((resolve, reject) => {
-          ffmpeg(inputPath)
-            .outputOptions("-c copy")
-            .on("end", async () => {
-              await sendVideoFromFile(outputPath, mediaCaption);
-              await sendSuccessReact();
-              resolve();
-            })
-            .on("error", (err) => {
-              console.error("Erro FFmpeg:", err);
-              reject(err);
-            })
-            .save(outputPath);
-        });
+        // Copia o arquivo sem reprocessar
+        fs.copyFileSync(inputPath, outputPath);
+
+        await sendVideoFromFile(outputPath, mediaCaption);
+        await sendSuccessReact();
       }
     } catch (error) {
       console.error("Erro geral:", error);
