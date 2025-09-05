@@ -14,7 +14,6 @@ module.exports = {
    * @returns {Promise<void>}
    */
   handle: async ({
-    args,
     isImage,
     isVideo,
     downloadImage,
@@ -24,9 +23,6 @@ module.exports = {
     sendWaitReact,
     sendImageFromFile,
     sendVideoFromFile,
-    sendPrivateImageFromFile,
-    sendPrivateVideoFromFile,
-    sender, // id do autor do comando
   }) => {
     if (!isImage && !isVideo) {
       throw new InvalidParameterError(
@@ -36,7 +32,6 @@ module.exports = {
 
     await sendWaitReact();
 
-    const toPrivate = args.includes("@pv");
     const mediaCaption = `Aqui está sua ${isImage ? "imagem" : "vídeo"} revelada!`;
 
     const outputPath = path.resolve(
@@ -50,26 +45,19 @@ module.exports = {
       if (isImage) {
         inputPath = await downloadImage(webMessage, "input");
 
+        // Copia o arquivo sem reprocessar
         fs.copyFileSync(inputPath, outputPath);
 
-        if (toPrivate) {
-          await sendPrivateImageFromFile(sender, outputPath, mediaCaption);
-        } else {
-          await sendImageFromFile(outputPath, mediaCaption);
-        }
-
+        await sendImageFromFile(outputPath, mediaCaption);
         await sendSuccessReact();
+
       } else if (isVideo) {
         inputPath = await downloadVideo(webMessage, "input");
 
+        // Copia o arquivo sem reprocessar
         fs.copyFileSync(inputPath, outputPath);
 
-        if (toPrivate) {
-          await sendPrivateVideoFromFile(sender, outputPath, mediaCaption);
-        } else {
-          await sendVideoFromFile(outputPath, mediaCaption);
-        }
-
+        await sendVideoFromFile(outputPath, mediaCaption);
         await sendSuccessReact();
       }
     } catch (error) {
